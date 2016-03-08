@@ -8,7 +8,7 @@ def masa(address):
     sock.listen(4)
     while True:
         client, addr = sock.accept()
-        print("baglanti", addr)
+        print(str(addr[0]) + "addresi "+str(addr[1]) +" portundan masaya yeni bir oyuncu geldi")
         # Çoklu oyuncu için thread kullanıldı
         #oyunaGir metoduna gelen bağlantı bilgileri parametre olarak gönderildi
         Thread(target = oyunaGir, args = (client,), daemon = True).start()
@@ -19,15 +19,19 @@ def oyunaGir(client):
         req = client.recv(100)
         if not req:
             break
+        komut =""
+        komut = "4 kart verildi"
+        resp =komut.encode('ascii')+b"\n"
+        client.send(resp)
+        #data = "Oyuncu: "+ str(req)
 
-        data = "Oyuncu: "+ str(req)
         ###
         #İşlemler
         ###
 
-        resp = str(data).encode('ascii')+b"\n"
+
         # bağlı oyuncuya gerekli mesaj gönderiliyor
-        client.send(resp)
+
     print("Oyun bitti")
 if __name__ is "__main__":
     masa(('',7000))

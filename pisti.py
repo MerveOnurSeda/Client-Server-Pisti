@@ -13,8 +13,17 @@ class Oyuncu(object):
 		self.oid = oid
 		self.el = []
 		self.kazanc = []
-		self.pisti=0
-
+		self.puan=0
+	def __str__(self):
+		return "".join(x.tip+" "+x.numara+"\n" for x in self.el)
+	def puanlama(self):
+		for kart in self.kazanc:
+			if kart.numara is "As" or "Vale":
+				self.puan+=4
+			elif kart.tip is "Sinek" and kart.numara is "2":
+				self.puan+=2
+			elif kart.tip is "Karo" and kart.numara is "10":
+				self.puan+=3
 class Pisti(object):
 	def __init__(self):
 		self.oyuncu1 = Oyuncu(1)
@@ -57,14 +66,18 @@ class Pisti(object):
 
 		if len(self.oyuncu.el)==0:
 			self.kart_ver()
-
+	def masa_goster(self):
+		print([kart.tip+" "+kart.numara for kart in self.masa])
 	def kart_at(self, oyuncu, kart):
 		try:
 			print("Kart atildi")
 			self.masa.append(kart)
 			oyuncu.el.remove(kart)
 			if len(self.masa) is 2 and self.masa[-1].numara is self.masa[-2].numara:
-				oyuncu.pisti+=10
+				if self.masa[-1].numara is "Vale":				
+					oyuncu.puan+=20
+				else:
+					oyuncu.puan+=10
 				print(str(oyuncu.oid)+" pisti yapti")
 				self.masa.clear()
 			else:
